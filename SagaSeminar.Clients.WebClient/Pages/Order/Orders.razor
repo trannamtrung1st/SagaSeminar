@@ -1,0 +1,55 @@
+﻿@page "/orders"
+@using SagaSeminar.Shared.Models;
+@using SagaSeminar.Shared;
+
+<PageTitle>Orders</PageTitle>
+
+<Title Level="2">Order List</Title>
+
+<GridRow Justify="end">
+    <GridCol>
+        <Space>
+            <SpaceItem>
+                <Button Type="@ButtonType.Default" OnClick="Refresh" Icon="@IconType.Outline.Reload">
+                    Refresh
+                </Button>
+            </SpaceItem>
+            <SpaceItem>
+                <NavLink href="/orders/create">
+                    <Button Type="@ButtonType.Primary">Create</Button>
+                </NavLink>
+            </SpaceItem>
+        </Space>
+    </GridCol>
+</GridRow>
+
+<Divider />
+
+<Table TItem="OrderModel" DataSource="List"
+       Loading="Loading"
+       Total="Total"
+       PageSize="PageSize"
+       PaginationPosition="bottomRight"
+       PageIndex="PageIndex"
+       OnPageIndexChange="OnPageIndexChange"
+       OnRowClick="OnRowClick"
+       RemoteDataSource>
+    <Column TData="string" DataIndex="Customer" Title="Customer" />
+    <Column TData="double" Style="color: green" DataIndex="Amount" Title="Amount" />
+    <Column TData="DateTime" DataIndex="CreatedTime" Title="Created Time" />
+    <Column TData="string" DataIndex="Status" Title="Status">
+        @switch (context.Status)
+        {
+            case Constants.OrderStatus.Processing:
+                <span style="color: darkorange">Processing</span>
+                break;
+            case Constants.OrderStatus.Completed:
+                <span style="color: green">Completed</span>
+                break;
+            case Constants.OrderStatus.Cancelled:
+                <span style="color: grey">Cancelled</span>
+                break;
+        }
+    </Column>
+    <Column TData="string" DataIndex="Note" Title="Note" />
+</Table>

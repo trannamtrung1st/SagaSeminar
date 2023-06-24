@@ -1,0 +1,37 @@
+version: "3.8"
+name: saga-seminar-infras
+services:
+  redis:
+    image: redis:7.0.8-alpine
+    ports:
+      - "6379:6379"
+
+  sql-server:
+    image: mcr.microsoft.com/mssql/server:2019-CU18-ubuntu-20.04
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_PID=Express
+      - SA_PASSWORD=z@123456!
+    ports:
+      - target: 1433
+        published: 1434
+
+  kafka:
+    image: saga-seminar:kafka-linux-1.0
+    build:
+      context: .
+      dockerfile: External/Kafka/Dockerfile
+    environment:
+      - BROKER_ID=1
+      - LOCAL_PORT=9092
+      - DOCKER_PORT=29092
+    volumes:
+      - ./External/Kafka/config:/kafka/custom-config:ro
+      - ./External/Kafka/scripts:/kafka/scripts:ro
+    ports:
+      - target: 9092
+        published: 9092
+
+networks:
+  default:
+    name: saga-seminar-infras

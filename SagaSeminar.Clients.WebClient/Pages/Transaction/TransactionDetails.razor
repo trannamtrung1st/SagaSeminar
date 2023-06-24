@@ -1,0 +1,61 @@
+﻿@page "/transactions/{Id}"
+@using SagaSeminar.Shared.Models;
+@using SagaSeminar.Shared;
+
+<PageTitle>Transaction Details</PageTitle>
+
+<Title Level="2">Transaction Details</Title>
+
+<GridRow Justify="end">
+    <GridCol>
+        <Space>
+            <SpaceItem>
+                <Button Type="@ButtonType.Default" OnClick="Refresh" Icon="@IconType.Outline.Reload">
+                    Refresh
+                </Button>
+            </SpaceItem>
+        </Space>
+    </GridCol>
+</GridRow>
+
+<Divider />
+
+@if (Model != null)
+{
+    <Descriptions Title="Details">
+        <DescriptionsItem LabelStyle="font-weight: 500" Title="Id">@Model.Id</DescriptionsItem>
+        <DescriptionsItem LabelStyle="font-weight: 500" Title="Status">
+            <TransactionStatus Status="@Model.Status" />
+        </DescriptionsItem>
+        <DescriptionsItem LabelStyle="font-weight: 500" Title="Started Time">@Model.StartedTime</DescriptionsItem>
+        <DescriptionsItem LabelStyle="font-weight: 500" Title="Last Updated">@Model.LastUpdatedTime</DescriptionsItem>
+    </Descriptions>
+
+    <Title Level="4">Saga Transactions</Title>
+
+    @if (Model.Transactions != null)
+    {
+        <Table TItem="SagaTransactionModel" DataSource="Model.Transactions" Loading="Loading">
+            <Column TData="string" DataIndex="Name" Title="Name" />
+            <Column TData="string" DataIndex="Note" Title="Note" />
+            <Column TData="string" Title="Status">
+                <TransactionStatus Status="@context.Status" />
+            </Column>
+            <Column TData="DateTime" DataIndex="StartedTime" Title="Started Time" />
+            <Column TData="DateTime" DataIndex="LastUpdatedTime" Title="Last Updated Time" />
+            <Column TData="string" Title="Response">
+                <div style="max-width:200px;max-height:200px;overflow:auto">
+                    @context.Response
+                </div>
+            </Column>
+            <ActionColumn Title="Actions">
+                @if (context.Retryable && context.Status != Constants.TransactionStatus.Successful)
+                {
+                    <Button Type="@ButtonType.Primary" OnClick="OnRetry(context)">
+                        Retry
+                    </Button>
+                }
+            </ActionColumn>
+        </Table>
+    }
+}

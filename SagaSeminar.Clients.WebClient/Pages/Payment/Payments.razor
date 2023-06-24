@@ -1,0 +1,47 @@
+﻿@page "/payments"
+@using SagaSeminar.Shared.Models;
+@using SagaSeminar.Shared;
+
+<PageTitle>Payments</PageTitle>
+
+<Title Level="2">Payment List</Title>
+
+<GridRow Justify="end">
+    <GridCol>
+        <Space>
+            <SpaceItem>
+                <Button Type="@ButtonType.Default" OnClick="Refresh" Icon="@IconType.Outline.Reload">
+                    Refresh
+                </Button>
+            </SpaceItem>
+        </Space>
+    </GridCol>
+</GridRow>
+
+<Divider />
+
+<Table TItem="PaymentModel" DataSource="List"
+       Loading="Loading"
+       Total="Total"
+       PageSize="PageSize"
+       PaginationPosition="bottomRight"
+       PageIndex="PageIndex"
+       OnPageIndexChange="OnPageIndexChange"
+       OnRowClick="OnRowClick"
+       RemoteDataSource>
+    <Column TData="string" DataIndex="Customer" Title="Customer" />
+    <Column TData="double" Style="color: green" DataIndex="Amount" Title="Amount" />
+    <Column TData="DateTime" DataIndex="CreatedTime" Title="Created Time" />
+    <Column TData="string" DataIndex="Status" Title="Status">
+        @switch (context.Status)
+        {
+            case Constants.PaymentStatus.Successful:
+                <span style="color: green">Successful</span>
+                break;
+            case Constants.PaymentStatus.Cancelled:
+                <span style="color: grey">Cancelled</span>
+                break;
+        }
+    </Column>
+    <Column TData="string" DataIndex="Note" Title="Note" />
+</Table>

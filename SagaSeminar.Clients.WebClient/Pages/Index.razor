@@ -1,0 +1,19 @@
+﻿@page "/"
+@using SagaSeminar.Shared.Models;
+
+<PageTitle>Home Page</PageTitle>
+
+<Title Level="2">Home Page</Title>
+
+<Divider />
+
+<Title Level="3">Monitoring</Title>
+
+<div style="max-height: 400px; overflow: auto; font-size: larger">
+    @foreach (LogModel model in Logs)
+    {
+        <p style="color: @model.Color">
+            [@model.Time] [@model.Source] @model.Data
+        </p>
+    }
+</div>

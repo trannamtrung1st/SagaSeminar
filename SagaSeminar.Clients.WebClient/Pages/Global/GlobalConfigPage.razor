@@ -1,0 +1,47 @@
+﻿@page "/global-config"
+@using SagaSeminar.Shared.Models;
+
+<PageTitle>Manage Global Config</PageTitle>
+
+<Title Level="2">Manage Global Config</Title>
+
+<Form Loading="Loading" Model="Model"
+      LabelColSpan="8"
+      WrapperColSpan="16"
+      OnFinish="OnFinish"
+      OnFinishFailed="OnFinishFailed"
+      ValidateMode="@FormValidateMode.Rules"
+      ValidateOnChange="true">
+    <FormItem Label="Delay (ms)">
+        <AntDesign.InputNumber @bind-Value="@context.DelayMs" />
+    </FormItem>
+    <FormItem Label="Should create order fail">
+        <Checkbox @bind-Value="@context.ShouldCreateOrderFail" />
+    </FormItem>
+    <FormItem Label="Should process payment fail">
+        <Checkbox @bind-Value="@context.ShouldProcessPaymentFail" />
+    </FormItem>
+    <FormItem Label="Should inventory delivery fail">
+        <Checkbox @bind-Value="@context.ShouldInventoryDeliveryFail" />
+    </FormItem>
+    <FormItem Label="Should delivery fail">
+        <Checkbox @bind-Value="@context.ShouldDeliveryFail" />
+    </FormItem>
+    <FormItem Label="Complete order retry count">
+        <AntDesign.InputNumber @bind-Value="@context.CompleteOrderRetryCount" />
+    </FormItem>
+    <FormItem Label="Use orchestrator saga">
+        <Checkbox @bind-Value="@context.UseOrchestratorSaga" />
+    </FormItem>
+    <FormItem Label="Use replay technique">
+        <Checkbox @bind-Value="@context.UseReplayTechnique" />
+    </FormItem>
+    <FormItem Label="Should reset data">
+        <Checkbox @bind-Value="@context.ShouldResetData" />
+    </FormItem>
+    <FormItem WrapperColOffset="8" WrapperColSpan="16">
+        <Button Type="@ButtonType.Primary" HtmlType="submit">
+            Submit
+        </Button>
+    </FormItem>
+</Form>

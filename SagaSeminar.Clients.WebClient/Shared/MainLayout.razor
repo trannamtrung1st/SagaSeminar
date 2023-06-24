@@ -1,0 +1,58 @@
+﻿@inherits LayoutComponentBase
+
+<Layout>
+    <Sider Style="overflow: auto;height: 100vh;position: fixed;left: 0;">
+        <div class="logo" />
+        <Menu Theme="MenuTheme.Dark" Mode="MenuMode.Inline">
+            <MenuItem Key="home" RouterLink="/">
+                <Icon Type="home" Theme="outline" />
+                <span class="nav-text">Home</span>
+            </MenuItem>
+            <MenuItem Key="orders" RouterLink="/orders" RouterMatch="NavLinkMatch.Prefix">
+                <Icon Type="shopping-cart" Theme="outline" />
+                <span class="nav-text">Orders</span>
+            </MenuItem>
+            <MenuItem Key="payments" RouterLink="/payments" RouterMatch="NavLinkMatch.Prefix">
+                <Icon Type="dollar" Theme="outline" />
+                <span class="nav-text">Payments</span>
+            </MenuItem>
+            <MenuItem Key="inventory" RouterLink="/inventory" RouterMatch="NavLinkMatch.Prefix">
+                <Icon Type="hdd" Theme="outline" />
+                <span class="nav-text">Inventory</span>
+            </MenuItem>
+            <MenuItem Key="deliveries" RouterLink="/deliveries" RouterMatch="NavLinkMatch.Prefix">
+                <Icon Type="car" Theme="outline" />
+                <span class="nav-text">Deliveries</span>
+            </MenuItem>
+            <MenuItem Key="transactions" RouterLink="/transactions" RouterMatch="NavLinkMatch.Prefix">
+                <Icon Type="retweet" Theme="outline" />
+                <span class="nav-text">Transactions</span>
+            </MenuItem>
+            <MenuItem Key="global-config" RouterLink="/global-config" RouterMatch="NavLinkMatch.Prefix">
+                <Icon Type="setting" Theme="outline" />
+                <span class="nav-text">Global Config</span>
+            </MenuItem>
+        </Menu>
+    </Sider>
+    <Layout Class="site-layout" Style=" margin-left: 200px">
+        <Header Class="site-layout-background" Style="padding: 0"></Header>
+        <Content Style="margin: 24px 16px 0; overflow: initial; ">
+            <div class="site-layout-background" style="padding: 24px;">
+                @Body
+            </div>
+        </Content>
+        <Footer Style=" text-align: center;">Ant Design ©2018 Created by Ant UED</Footer>
+    </Layout>
+</Layout>
+
+<style>
+    .logo {
+        height: 32px;
+        background: rgba(255, 255, 255, 0.2);
+        margin: 16px;
+    }
+
+    .site-layout .site-layout-background {
+        background: #fff;
+    }
+</style>

@@ -1,0 +1,42 @@
+﻿@page "/inventory"
+@using SagaSeminar.Shared.Models;
+
+<PageTitle>Inventory</PageTitle>
+
+<Title Level="2">Inventory</Title>
+
+<GridRow Justify="end">
+    <GridCol>
+        <Space>
+            <SpaceItem>
+                <Button Type="@ButtonType.Default" OnClick="Refresh" Icon="@IconType.Outline.Reload">
+                    Refresh
+                </Button>
+            </SpaceItem>
+        </Space>
+    </GridCol>
+</GridRow>
+
+<Divider />
+
+<Title Level="3">Inventory Notes</Title>
+
+<p>Available: @AvailableQuantity</p>
+
+<Table TItem="InventoryNoteModel" DataSource="List"
+       Loading="Loading"
+       Total="Total"
+       PageSize="PageSize"
+       PaginationPosition="bottomRight"
+       PageIndex="PageIndex"
+       OnPageIndexChange="OnPageIndexChange"
+       OnRowClick="OnRowClick"
+       RemoteDataSource>
+    <Column TData="int"
+            Style=@((context.Quantity > 0 ? "color: green" : "color: red"))
+            DataIndex="Quantity" Title="Quantity">
+        @(context.Quantity > 0 ? $"+{context.Quantity}" : $"{context.Quantity}")
+    </Column>
+    <Column TData="DateTime" DataIndex="CreatedTime" Title="Created Time" />
+    <Column TData="string" DataIndex="Reason" Title="Reason" />
+</Table>

@@ -1,0 +1,34 @@
+﻿@page "/deliveries"
+@using SagaSeminar.Shared.Models;
+
+<PageTitle>Deliveries</PageTitle>
+
+<Title Level="2">Deliveries</Title>
+
+<GridRow Justify="end">
+    <GridCol>
+        <Space>
+            <SpaceItem>
+                <Button Type="@ButtonType.Default" OnClick="Refresh" Icon="@IconType.Outline.Reload">
+                    Refresh
+                </Button>
+            </SpaceItem>
+        </Space>
+    </GridCol>
+</GridRow>
+
+<Divider />
+
+<Table TItem="DeliveryModel" DataSource="List"
+       Loading="Loading"
+       Total="Total"
+       PageSize="PageSize"
+       PageIndex="PageIndex"
+       PaginationPosition="bottomRight"
+       OnPageIndexChange="OnPageIndexChange"
+       OnRowClick="OnRowClick"
+       RemoteDataSource>
+    <Column TData="int" Style="color: green" DataIndex="Quantity" Title="Quantity" />
+    <Column TData="string" DataIndex="Customer" Title="Customer" />
+    <Column TData="DateTime" DataIndex="CreatedTime" Title="Created Time" />
+</Table>

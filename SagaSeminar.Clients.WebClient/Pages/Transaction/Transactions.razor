@@ -1,0 +1,40 @@
+﻿@page "/transactions"
+@using SagaSeminar.Shared.Models;
+
+<PageTitle>Transactions</PageTitle>
+
+<Title Level="2">Transactions</Title>
+
+<GridRow Justify="end">
+    <GridCol>
+        <Space>
+            <SpaceItem>
+                <Button Type="@ButtonType.Default" OnClick="Refresh" Icon="@IconType.Outline.Reload">
+                    Refresh
+                </Button>
+            </SpaceItem>
+        </Space>
+    </GridCol>
+</GridRow>
+
+<Divider />
+
+<Table TItem="TransactionListingModel" DataSource="List"
+       Loading="Loading"
+       Total="Total"
+       PageIndex="PageIndex"
+       PageSize="PageSize"
+       PaginationPosition="bottomRight"
+       OnPageIndexChange="OnPageIndexChange"
+       OnRowClick="OnRowClick"
+       RemoteDataSource>
+    <Column TData="string" Title="Id">
+        <NavLink href=@($"/transactions/{context.Id}")>@context.Id</NavLink>
+    </Column>
+    <Column TData="DateTime" DataIndex="StartedTime" Title="Started Time" />
+    <Column TData="DateTime" DataIndex="LastUpdatedTime" Title="Last Updated Time" />
+    <Column TData="string" DataIndex="RunningTransactionName" Title="Running Transaction" />
+    <Column TData="string" Title="Status">
+        <TransactionStatus Status="@context.Status" />
+    </Column>
+</Table>

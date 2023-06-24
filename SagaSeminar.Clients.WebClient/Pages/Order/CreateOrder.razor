@@ -1,0 +1,38 @@
+﻿@page "/orders/create"
+@using SagaSeminar.Shared.Models;
+
+<PageTitle>Create Order</PageTitle>
+
+<Title Level="2">Create Order</Title>
+
+<Form Loading="Loading" Model="Model"
+      LabelColSpan="8"
+      WrapperColSpan="16"
+      OnFinish="OnFinish"
+      OnFinishFailed="OnFinishFailed"
+      ValidateMode="@FormValidateMode.Rules"
+      ValidateOnChange="true">
+    <FormItem Required Rules="CustomerRules" Label="Customer">
+        <Input @bind-Value="@context.Customer" />
+    </FormItem>
+    <FormItem Required Rules="AmountRules" Label="Amount">
+        <AntDesign.InputNumber @bind-Value="@context.Amount" />
+    </FormItem>
+    <FormItem WrapperColOffset="8" WrapperColSpan="16">
+        <Button Type="@ButtonType.Primary" HtmlType="submit">
+            Submit
+        </Button>
+    </FormItem>
+</Form>
+
+@code {
+    FormValidationRule[] CustomerRules = new[]
+    {
+        new FormValidationRule() { Required = true }
+    };
+
+    FormValidationRule[] AmountRules = new[]
+    {
+        new FormValidationRule() { Required = true, Min = 0, Type = FormFieldType.Number }
+    };
+}

@@ -1,0 +1,30 @@
+﻿@using SagaSeminar.Shared;
+
+@switch (Status)
+{
+    case Constants.TransactionStatus.Successful:
+        {
+            <span style="color:green">Successful</span>
+            break;
+        }
+    case Constants.TransactionStatus.Processing:
+        {
+            <span style="color:orange">Processing</span>
+            break;
+        }
+    case Constants.TransactionStatus.Failed:
+        {
+            <span style="color:red">Failed</span>
+            break;
+        }
+    case Constants.TransactionStatus.Triggered:
+        {
+            <span style="color:blue">Triggered</span>
+            break;
+        }
+}
+
+@code {
+    [Parameter]
+    public string Status { get; set; }
+}

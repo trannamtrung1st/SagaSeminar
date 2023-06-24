@@ -1,0 +1,166 @@
+version: "3.8"
+name: saga-seminar-apps
+services:
+  redis:
+    image: redis:7.0.8-alpine
+    ports:
+      - "6379:6379"
+
+  sql-server:
+    image: mcr.microsoft.com/mssql/server:2019-CU18-ubuntu-20.04
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_PID=Express
+      - SA_PASSWORD=z@123456!
+    ports:
+      - target: 1433
+        published: 1434
+
+  kafka:
+    image: saga-seminar:kafka-linux-1.0
+    build:
+      context: .
+      dockerfile: External/Kafka/Dockerfile
+    environment:
+      - BROKER_ID=1
+      - LOCAL_PORT=9092
+      - DOCKER_PORT=29092
+    volumes:
+      - ./External/Kafka/config:/kafka/custom-config:ro
+      - ./External/Kafka/scripts:/kafka/scripts:ro
+    ports:
+      - target: 9092
+        published: 9092
+  
+  web-client:
+    image: saga-seminar:web-client-1.0
+    build:
+      context: .
+      dockerfile: SagaSeminar.Clients.WebClient/Dockerfile
+    ports:
+      - target: 80
+        published: 10000
+      
+  global-service:
+    image: saga-seminar:global-service-1.0
+    build:
+      context: .
+      dockerfile: SagaSeminar/Dockerfile
+    ports:
+      - target: 80
+        published: 10001
+    environment:
+      - ConnectionStrings__SagaDbContext=Server=sql-server;Database=SagaDb;Trusted_Connection=False;User Id=sa;Password=z@123456!;MultipleActiveResultSets=true;TrustServerCertificate=true
+      - Redis__Endpoint=redis:6379
+      - Kafka__AdminConfig__BootstrapServers=kafka:29092
+      - Kafka__ProducerConfig__BootstrapServers=kafka:29092
+      - Kafka__ConsumerConfig__BootstrapServers=kafka:29092
+      - ApiInfo__GlobalApiBase=http://global-service
+      - ApiInfo__OrderApiBase=http://order-service
+      - ApiInfo__PaymentApiBase=http://payment-service
+      - ApiInfo__InventoryApiBase=http://inventory-service
+      - ApiInfo__ShippingApiBase=http://shipping-service
+    depends_on:
+      - redis
+      - sql-server
+      - kafka
+      
+  order-service:
+    image: saga-seminar:order-service-1.0
+    build:
+      context: .
+      dockerfile: SagaSeminar.Services.OrderService/Dockerfile
+    ports:
+      - target: 80
+        published: 10002
+    environment:
+      - ConnectionStrings__OrderDbContext=Server=sql-server;Database=OrderDb;Trusted_Connection=False;User Id=sa;Password=z@123456!;MultipleActiveResultSets=true;TrustServerCertificate=true
+      - Redis__Endpoint=redis:6379
+      - Kafka__ProducerConfig__BootstrapServers=kafka:29092
+      - Kafka__ConsumerConfig__BootstrapServers=kafka:29092
+      - ApiInfo__GlobalApiBase=http://global-service
+      - ApiInfo__OrderApiBase=http://order-service
+      - ApiInfo__PaymentApiBase=http://payment-service
+      - ApiInfo__InventoryApiBase=http://inventory-service
+      - ApiInfo__ShippingApiBase=http://shipping-service
+    depends_on:
+      - redis
+      - sql-server
+      - kafka
+      - global-service
+
+  payment-service:
+    image: saga-seminar:payment-service-1.0
+    build:
+      context: .
+      dockerfile: SagaSeminar.Services.PaymentService/Dockerfile
+    ports:
+      - target: 80
+        published: 10003
+    environment:
+      - ConnectionStrings__PaymentDbContext=Server=sql-server;Database=PaymentDb;Trusted_Connection=False;User Id=sa;Password=z@123456!;MultipleActiveResultSets=true;TrustServerCertificate=true
+      - Redis__Endpoint=redis:6379
+      - Kafka__ProducerConfig__BootstrapServers=kafka:29092
+      - Kafka__ConsumerConfig__BootstrapServers=kafka:29092
+      - ApiInfo__GlobalApiBase=http://global-service
+      - ApiInfo__OrderApiBase=http://order-service
+      - ApiInfo__PaymentApiBase=http://payment-service
+      - ApiInfo__InventoryApiBase=http://inventory-service
+      - ApiInfo__ShippingApiBase=http://shipping-service
+    depends_on:
+      - redis
+      - sql-server
+      - kafka
+      - global-service
+
+  inventory-service:
+    image: saga-seminar:inventory-service-1.0
+    build:
+      context: .
+      dockerfile: SagaSeminar.Services.InventoryService/Dockerfile
+    ports:
+      - target: 80
+        published: 10004
+    environment:
+      - ConnectionStrings__InventoryDbContext=Server=sql-server;Database=InventoryDb;Trusted_Connection=False;User Id=sa;Password=z@123456!;MultipleActiveResultSets=true;TrustServerCertificate=true
+      - Redis__Endpoint=redis:6379
+      - Kafka__ProducerConfig__BootstrapServers=kafka:29092
+      - Kafka__ConsumerConfig__BootstrapServers=kafka:29092
+      - ApiInfo__GlobalApiBase=http://global-service
+      - ApiInfo__OrderApiBase=http://order-service
+      - ApiInfo__PaymentApiBase=http://payment-service
+      - ApiInfo__InventoryApiBase=http://inventory-service
+      - ApiInfo__ShippingApiBase=http://shipping-service
+    depends_on:
+      - redis
+      - sql-server
+      - kafka
+      - global-service
+  
+  shipping-service:
+    image: saga-seminar:shipping-service-1.0
+    build:
+      context: .
+      dockerfile: SagaSeminar.Services.ShippingService/Dockerfile
+    ports:
+      - target: 80
+        published: 10005
+    environment:
+      - ConnectionStrings__ShippingDbContext=Server=sql-server;Database=ShippingDb;Trusted_Connection=False;User Id=sa;Password=z@123456!;MultipleActiveResultSets=true;TrustServerCertificate=true
+      - Redis__Endpoint=redis:6379
+      - Kafka__ProducerConfig__BootstrapServers=kafka:29092
+      - Kafka__ConsumerConfig__BootstrapServers=kafka:29092
+      - ApiInfo__GlobalApiBase=http://global-service
+      - ApiInfo__OrderApiBase=http://order-service
+      - ApiInfo__PaymentApiBase=http://payment-service
+      - ApiInfo__InventoryApiBase=http://inventory-service
+      - ApiInfo__ShippingApiBase=http://shipping-service
+    depends_on:
+      - redis
+      - sql-server
+      - kafka
+      - global-service
+      
+networks:
+  default:
+    name: saga-seminar-apps
