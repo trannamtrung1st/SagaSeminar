@@ -6,7 +6,7 @@ This project is built for demonstrating the usage of Saga pattern in a distribut
 Overview structure:
 + `Resources`: 
   + Presentation slide and medias
-  + The seminar slide is [Saga Seminar.pptx](/Resources/Saga%20Seminar.pptx)
+  + The seminar slide is [Saga Seminar.pdf](/Resources/Saga%20Seminar.pdf)
 + `Others`: source code related files
 
 ## 2. Installation
