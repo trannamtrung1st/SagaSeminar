@@ -3,6 +3,8 @@
 ## 1. Introduction
 This project is built for demonstrating the usage of Saga pattern in a distributed software system.
 
+Seminar video: https://youtu.be/s8p2SSCjw9g
+
 Overview structure:
 + `Resources`: 
   + Presentation slide and medias
